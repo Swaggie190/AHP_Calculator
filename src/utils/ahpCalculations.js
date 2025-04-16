@@ -105,26 +105,67 @@ export const createReciprocalMatrix = (upperTriangular) => {
 };
 
 /**
- * Calculate the final scores for all alternatives
- * @param {Array<Array<number>>} criteriaMatrix - The criteria comparison matrix
- * @param {Array<Array<Array<number>>>} alternativesMatrices - The alternatives comparison matrices for each criterion
+ * Calculate the final scores for alternatives based on their specifications and criteria weights
+ * Following the AHP synthesis approach from lecture notes
+ * @param {Array<Array<string|number>>} specifications - Matrix of alternative specifications for each criterion
+ * @param {Array<number>} criteriaWeights - Weights for each criterion
+ * @param {Array<string>} criteria - List of criterion names
  * @returns {Array<number>} - The final scores for each alternative
  */
-export const calculateFinalScores = (criteriaMatrix, alternativesMatrices) => {
-  const criteriaWeights = calculatePriorityVector(criteriaMatrix);
-  const alternativeWeights = alternativesMatrices.map((matrix) =>
-    calculatePriorityVector(matrix)
-  );
-
-  const numAlternatives = alternativesMatrices[0].length;
+export const synthesizeResults = (specifications, criteriaWeights, criteria) => {
+  const numAlternatives = specifications.length;
+  const numCriteria = criteriaWeights.length;
   const finalScores = Array(numAlternatives).fill(0);
-
-  for (let i = 0; i < numAlternatives; i++) {
-    for (let j = 0; j < criteriaWeights.length; j++) {
-      finalScores[i] += alternativeWeights[j][i] * criteriaWeights[j];
+  
+  // For each criterion, determine if higher is better or lower is better
+  const criteriaHigherIsBetter = criteria.map(criterion => {
+    // For price, lower is better
+    if (criterion.toLowerCase().includes('price')) {
+      return false;
+    }
+    // For all other criteria, higher is better
+    return true;
+  });
+  
+  // Process each criterion
+  for (let critIndex = 0; critIndex < numCriteria; critIndex++) {
+    // Extract all values for this criterion
+    const criterionValues = specifications.map(altSpecs => {
+      const value = parseFloat(altSpecs[critIndex]);
+      return isNaN(value) ? 0 : value;
+    });
+    
+    // Find best value (max for higher is better, min for lower is better)
+    let bestValue;
+    if (criteriaHigherIsBetter[critIndex]) {
+      bestValue = Math.max(...criterionValues);
+    } else {
+      // For criteria where lower is better (e.g., price)
+      bestValue = Math.min(...criterionValues.filter(v => v > 0));
+    }
+    
+    // Skip if best value is 0 or undefined
+    if (!bestValue) continue;
+    
+    // Calculate normalized scores for each alternative for this criterion
+    for (let altIndex = 0; altIndex < numAlternatives; altIndex++) {
+      const value = parseFloat(specifications[altIndex][critIndex]);
+      if (isNaN(value) || value === 0) continue;
+      
+      let score;
+      if (criteriaHigherIsBetter[critIndex]) {
+        // Higher values are better (e.g., memory, storage)
+        score = value / bestValue;
+      } else {
+        // Lower values are better (e.g., price)
+        score = bestValue / value;
+      }
+      
+      // Add weighted score to final score
+      finalScores[altIndex] += score * criteriaWeights[critIndex];
     }
   }
-
+  
   return finalScores;
 };
 

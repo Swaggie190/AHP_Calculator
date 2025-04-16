@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const AlternativesInput = ({ alternatives, onAlternativesChange, onNext }) => {
+const AlternativesInput = ({ alternatives, onAlternativesChange, onNext, itemType = 'Phone' }) => {
   const [alternativeText, setAlternativeText] = useState(
     alternatives.join('\n')
   );
@@ -19,7 +19,7 @@ const AlternativesInput = ({ alternatives, onAlternativesChange, onNext }) => {
 
     // Validate that we have at least 2 alternatives
     if (newAlternatives.length < 2) {
-      setError('Please enter at least 2 alternatives');
+      setError(`Please enter at least 2 ${itemType.toLowerCase()} alternatives`);
       return;
     }
 
@@ -33,14 +33,14 @@ const AlternativesInput = ({ alternatives, onAlternativesChange, onNext }) => {
 
   return (
     <div className="alternatives-input">
-      <h2>Step 1: Enter Phone Alternatives</h2>
-      <p>Enter each phone alternative on a new line:</p>
+      <h2>Step 1: Enter {itemType} Alternatives</h2>
+      <p>Enter each {itemType.toLowerCase()} alternative on a new line:</p>
 
       <textarea
         rows={15}
         value={alternativeText}
         onChange={handleChange}
-        placeholder="Enter each phone alternative on a new line"
+        placeholder={`Enter each ${itemType.toLowerCase()} alternative on a new line`}
         className="alternatives-textarea"
       />
 

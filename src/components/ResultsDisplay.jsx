@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ResultsDisplay = ({ results, onReset }) => {
+const ResultsDisplay = ({ results, onReset, itemType = 'Phone' }) => {
   // Find the best alternative (highest score)
   const bestAlternative = results[0];
 
@@ -9,7 +9,7 @@ const ResultsDisplay = ({ results, onReset }) => {
 
   return (
     <div className="results-display">
-      <h2>Results: Your Ideal Phone</h2>
+      <h2>Results: Your Ideal {itemType}</h2>
 
       <div className="best-alternative">
         <h3>Your Ideal Choice:</h3>
@@ -25,7 +25,7 @@ const ResultsDisplay = ({ results, onReset }) => {
           <thead>
             <tr>
               <th>Rank</th>
-              <th>Phone</th>
+              <th>{itemType}</th>
               <th>Score</th>
               <th>Comparison</th>
             </tr>

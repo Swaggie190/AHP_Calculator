@@ -2,15 +2,19 @@ import { useState } from 'react';
 import Header from './components/Header';
 import AlternativesInput from './components/AlternativesInput';
 import CriteriaInput from './components/CriteriaInput';
-import PairwiseComparisonMatrix from './components/PairwiseComparisonMatrix';
+import AlternativesSpecificationInput from './components/AlternativesSpecificationInput';
 import ResultsDisplay from './components/ResultsDisplay';
 import {
-  calculateFinalScores,
+  calculatePriorityVector,
+  synthesizeResults,
   generatePairwiseMatrix,
 } from './utils/ahpCalculations';
 import './styles/global.css';
 
 const App = () => {
+  // Default item type is Phone (can be changed to "Laptop", "Car", etc.)
+  const [itemType, setItemType] = useState('Phone');
+  
   // Default values based on project requirements
   const defaultPhones = [
     'iPhone 12',
@@ -34,6 +38,22 @@ const App = () => {
     'Brand',
   ];
 
+  // Default specifications for phones to save time during demo
+  const defaultPhoneSpecs = [
+    // Memory(GB), Storage(GB), CPU(GHz), Price($), Brand(1-10)
+    ['6', '128', '2.8', '999', '9'],    // iPhone 12
+    ['4', '64', '1.8', '150', '5'],     // ItelA56
+    ['6', '128', '2.0', '200', '6'],    // Tecno Camon 12
+    ['4', '64', '2.0', '180', '6'],     // Infinix Hot 10
+    ['8', '256', '2.6', '700', '8'],    // Huawei P30
+    ['8', '128', '2.8', '600', '8'],    // Google Pixel 7
+    ['6', '128', '2.2', '250', '7'],    // Xiaomi Redmi Note 10
+    ['8', '256', '3.0', '800', '9'],    // Samsung Galaxy S22
+    ['8', '256', '3.2', '1200', '8'],   // Motorola Razr+
+    ['3', '64', '2.5', '600', '9'],     // iPhone XR
+    ['8', '256', '2.7', '700', '9'],    // Samsung Galaxy Note 10
+  ];
+
   // State management
   const [step, setStep] = useState(1);
   const [alternatives, setAlternatives] = useState(defaultPhones);
@@ -41,16 +61,24 @@ const App = () => {
   const [criteriaMatrix, setCriteriaMatrix] = useState(() =>
     generatePairwiseMatrix(defaultCriteria)
   );
-  const [alternativesMatrices, setAlternativesMatrices] = useState(() =>
-    defaultCriteria.map(() => generatePairwiseMatrix(defaultPhones))
+  const [specifications, setSpecifications] = useState(() => 
+    defaultPhoneSpecs || alternatives.map(() => criteria.map(() => ""))
   );
   const [results, setResults] = useState(null);
+
+  // Change item type
+  const handleItemTypeChange = (newType) => {
+    setItemType(newType);
+  };
 
   // Handler to move to next step
   const handleNextStep = () => {
     if (step === 3) {
-      // Calculate final results
-      const scores = calculateFinalScores(criteriaMatrix, alternativesMatrices);
+      // Calculate criteria weights
+      const criteriaWeights = calculatePriorityVector(criteriaMatrix);
+      
+      // Calculate final results using the new synthesis approach
+      const scores = synthesizeResults(specifications, criteriaWeights, criteria);
 
       // Find the indices sorted by score (highest to lowest)
       const rankedIndices = scores
@@ -78,19 +106,27 @@ const App = () => {
   // Handler for updating alternatives
   const handleAlternativesChange = (newAlternatives) => {
     setAlternatives(newAlternatives);
-    // Reset alternative matrices with new dimensions
-    setAlternativesMatrices(
-      criteria.map(() => generatePairwiseMatrix(newAlternatives))
-    );
+    
+    // Reset specifications with new alternatives
+    if (itemType === 'Phone' && newAlternatives.length === defaultPhones.length) {
+      // Keep using default phone specs if we're still using phones and have the same count
+      setSpecifications(defaultPhoneSpecs);
+    } else {
+      // Otherwise, reset to empty specs
+      setSpecifications(
+        newAlternatives.map(() => criteria.map(() => ""))
+      );
+    }
   };
 
   // Handler for updating criteria
   const handleCriteriaChange = (newCriteria) => {
     setCriteria(newCriteria);
     setCriteriaMatrix(generatePairwiseMatrix(newCriteria));
-    // Reset alternative matrices with new criteria count
-    setAlternativesMatrices(
-      newCriteria.map(() => generatePairwiseMatrix(alternatives))
+    
+    // Reset specifications with new criteria
+    setSpecifications(
+      alternatives.map(() => newCriteria.map(() => ""))
     );
   };
 
@@ -99,13 +135,9 @@ const App = () => {
     setCriteriaMatrix(newMatrix);
   };
 
-  // Handler for updating alternative matrices
-  const handleAlternativeMatrixChange = (criterionIndex, newMatrix) => {
-    setAlternativesMatrices((prevMatrices) => {
-      const newMatrices = [...prevMatrices];
-      newMatrices[criterionIndex] = newMatrix;
-      return newMatrices;
-    });
+  // Handler for updating specifications
+  const handleSpecificationsChange = (newSpecifications) => {
+    setSpecifications(newSpecifications);
   };
 
   // Reset the application
@@ -114,15 +146,36 @@ const App = () => {
     setAlternatives(defaultPhones);
     setCriteria(defaultCriteria);
     setCriteriaMatrix(generatePairwiseMatrix(defaultCriteria));
-    setAlternativesMatrices(
-      defaultCriteria.map(() => generatePairwiseMatrix(defaultPhones))
-    );
+    setSpecifications(defaultPhoneSpecs);
     setResults(null);
   };
 
+  // Item type selector component
+  const ItemTypeSelector = () => (
+    <div className="item-type-selector">
+      <label htmlFor="item-type">Item Type: </label>
+      <select 
+        id="item-type" 
+        value={itemType} 
+        onChange={(e) => handleItemTypeChange(e.target.value)}
+      >
+        <option value="Phone">Phone</option>
+        <option value="Laptop">Laptop</option>
+        <option value="Car">Car</option>
+        <option value="TV">TV</option>
+        <option value="Camera">Camera</option>
+        <option value="Item">Generic Item</option>
+      </select>
+    </div>
+  );
+
+  // Get criteria weights for display in specification input
+  const criteriaWeights = calculatePriorityVector(criteriaMatrix);
+
   return (
     <div className="app-container">
-      <Header />
+      <Header itemType={itemType} />
+      <ItemTypeSelector />
 
       <div className="app-content">
         {step === 1 && (
@@ -130,6 +183,7 @@ const App = () => {
             alternatives={alternatives}
             onAlternativesChange={handleAlternativesChange}
             onNext={handleNextStep}
+            itemType={itemType}
           />
         )}
 
@@ -145,18 +199,24 @@ const App = () => {
         )}
 
         {step === 3 && (
-          <PairwiseComparisonMatrix
+          <AlternativesSpecificationInput
             alternatives={alternatives}
             criteria={criteria}
-            alternativesMatrices={alternativesMatrices}
-            onAlternativeMatrixChange={handleAlternativeMatrixChange}
+            criteriaWeights={criteriaWeights}
+            specifications={specifications}
+            onSpecificationsChange={handleSpecificationsChange}
             onPrevious={handlePreviousStep}
             onNext={handleNextStep}
+            itemType={itemType}
           />
         )}
 
         {step === 4 && (
-          <ResultsDisplay results={results} onReset={handleReset} />
+          <ResultsDisplay 
+            results={results} 
+            onReset={handleReset} 
+            itemType={itemType}
+          />
         )}
       </div>
     </div>

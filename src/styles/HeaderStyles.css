@@ -1,0 +1,197 @@
+.app-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 2.5rem 2rem;
+    background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-xl), 0 0 20px rgba(79, 70, 229, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .app-header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: var(--primary-gradient);
+  }
+  
+  .header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+  
+  .logo-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .ahp-logo {
+    color: var(--primary-color);
+    margin-right: 0.75rem;
+    filter: drop-shadow(0 0 3px rgba(79, 70, 229, 0.5));
+  }
+  
+  .ahp-title {
+    font-family: 'Angelos', 'Montserrat', sans-serif;
+    color: var(--primary-color);
+    margin-bottom: 0;
+    font-size: 2.5rem;
+    letter-spacing: 0.05em;
+    font-weight: 800;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    text-shadow: 0 2px 10px rgba(79, 70, 229, 0.2);
+  }
+  
+  .subtitle {
+    font-family: 'Times New Roman', Times, serif;
+    font-style: italic;
+    font-size: 1.125rem;
+    color: var(--text-color);
+    margin-top: 0.25rem;
+  }
+  
+  .help-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    color: white;
+    font-size: 1.25rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+  }
+  
+  .help-button:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: var(--shadow-lg), var(--glow-blue);
+  }
+  
+  .help-button:focus {
+    outline: none;
+    box-shadow: var(--shadow-md), 0 0 0 3px var(--primary-light);
+  }
+  
+  /* Help Modal Styles */
+  .help-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .help-modal {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    width: 90%;
+    max-width: 550px;
+    box-shadow: var(--shadow-xl);
+    position: relative;
+    animation: slideIn 0.3s ease;
+  }
+  
+  .close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-color);
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+  }
+  
+  .close-modal:hover {
+    background-color: var(--medium-gray);
+  }
+  
+  .help-modal h3 {
+    font-family: 'Poppins', sans-serif;
+    color: var(--primary-color);
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+  
+  .help-modal p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+  
+  .help-modal ul {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+  }
+  
+  .help-modal ul li {
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .ahp-title {
+      font-size: 2rem;
+    }
+  
+    .subtitle {
+      font-size: 1rem;
+    }
+  
+    .help-modal {
+      padding: 1.5rem;
+    }
+  }
+  
+  /* Font face for Angelos (fallback to Montserrat if Angelos isn't available) */
+  @font-face {
+    font-family: 'Angelos';
+    src: local('Angelos');
+    /* Fallback will be Montserrat which is already imported in global.css */
+  }

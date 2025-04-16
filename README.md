@@ -4,7 +4,7 @@ This project implements the Analytic Hierarchy Process (AHP) to help select the 
 
 ## Project Overview
 
-The application follows the AHP methodology as described in the INF4178 Software Engineering course:
+The application follows the AHP methodology:
 
 1. Define the problem hierarchically (alternatives and criteria)
 2. Create pairwise comparison matrices to establish priorities

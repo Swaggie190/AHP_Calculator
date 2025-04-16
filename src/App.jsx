@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import AlternativesInput from './components/AlternativesInput';
 import CriteriaInput from './components/CriteriaInput';
 import AlternativesSpecificationInput from './components/AlternativesSpecificationInput';
@@ -66,7 +67,7 @@ const App = () => {
   );
   const [results, setResults] = useState(null);
 
-  // Change item type
+  // Change item type - now will only be available on first page
   const handleItemTypeChange = (newType) => {
     setItemType(newType);
   };
@@ -150,7 +151,7 @@ const App = () => {
     setResults(null);
   };
 
-  // Item type selector component
+  // Item type selector component - moved inside the first page component
   const ItemTypeSelector = () => (
     <div className="item-type-selector">
       <label htmlFor="item-type">Item Type: </label>
@@ -175,16 +176,18 @@ const App = () => {
   return (
     <div className="app-container">
       <Header itemType={itemType} />
-      <ItemTypeSelector />
 
       <div className="app-content">
         {step === 1 && (
-          <AlternativesInput
-            alternatives={alternatives}
-            onAlternativesChange={handleAlternativesChange}
-            onNext={handleNextStep}
-            itemType={itemType}
-          />
+          <>
+            <ItemTypeSelector />
+            <AlternativesInput
+              alternatives={alternatives}
+              onAlternativesChange={handleAlternativesChange}
+              onNext={handleNextStep}
+              itemType={itemType}
+            />
+          </>
         )}
 
         {step === 2 && (
@@ -219,6 +222,8 @@ const App = () => {
           />
         )}
       </div>
+      
+      <Footer />
     </div>
   );
 };

@@ -1,0 +1,291 @@
+.alternatives-input-container {
+    background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+  }
+  
+  .alternatives-header {
+    display: block; /* Change from flex to block */
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--primary-light);
+  }
+  
+  .heading-with-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* or start/end/center, depending */
+  }
+  .header-with-icon {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .alternatives-icon {
+    color: var(--primary-color);
+    margin-right: 0.75rem;
+  }
+  
+  .help-button-fixed {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    color: white;
+    font-size: 1.125rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+    margin-left: 10px; /* Fixed space between heading and button */
+  }
+
+  .help-button-fixed:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg), var(--glow-blue);
+  }
+
+  .alternatives-header h2 {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--primary-color);
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+  }
+  
+  .help-button {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    color: white;
+    font-size: 1.125rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+  }
+  
+  .help-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg), var(--glow-blue);
+  }
+  
+  .help-button:focus {
+    outline: none;
+    box-shadow: var(--shadow-md), 0 0 0 3px var(--primary-light);
+  }
+  
+  /* Alternative Cards Styles */
+  .alternatives-cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .alternative-card {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .alternative-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+  
+  .alternative-input {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    font-size: 1rem;
+    font-family: 'Quicksand', sans-serif;
+    background: transparent;
+  }
+  
+  .alternative-input:focus {
+    outline: none;
+  }
+  
+  .delete-button {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--error-gradient);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: all 0.2s ease;
+  }
+  
+  .delete-button:hover {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  
+  .add-alternative-button {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--success-gradient);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    margin: 0.5rem auto;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+  }
+  
+  .add-alternative-button:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-lg), 0 0 10px rgba(16, 185, 129, 0.5);
+  }
+  
+  /* Button Container */
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+  }
+  
+  .next-button {
+    display: flex;
+    align-items: center;
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: 'Quicksand', sans-serif;
+    cursor: pointer;
+    background: var(--primary-gradient);
+    color: white;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+  }
+  
+  .next-button:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg), var(--glow-blue);
+  }
+  
+  .arrow-icon {
+    margin-left: 0.5rem;
+  }
+  
+  /* Help Modal Styles */
+  .help-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .help-modal {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: var(--shadow-xl);
+    position: relative;
+    animation: slideIn 0.3s ease;
+  }
+  
+  .close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-color);
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+  }
+  
+  .close-modal:hover {
+    background-color: var(--medium-gray);
+  }
+  
+  .help-modal h3 {
+    font-family: 'Poppins', sans-serif;
+    color: var(--primary-color);
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+  
+  .help-modal p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+  
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .alternatives-header h2 {
+      font-size: 1.5rem;
+    }
+    
+    .alternatives-input-container {
+      padding: 1.5rem;
+    }
+    
+    .button-container {
+      justify-content: center;
+    }
+    
+    .next-button {
+      width: 100%;
+    }
+  }

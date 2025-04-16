@@ -13,6 +13,7 @@ const AlternativesSpecificationInput = ({
   // Initialize specifications as a matrix: alternatives x criteria
   const [localSpecifications, setLocalSpecifications] = useState(specifications);
   const [showDefaultsButton, setShowDefaultsButton] = useState(true);
+  const [showHelpModal, setShowHelpModal] = useState(false);
 
   // Reset specifications when alternatives or criteria change
   useEffect(() => {
@@ -32,6 +33,11 @@ const AlternativesSpecificationInput = ({
     altSpecs.every(spec => spec !== "")
   );
 
+  // Toggle help modal
+  const toggleHelpModal = () => {
+    setShowHelpModal(!showHelpModal);
+  };
+
   // Fill with sample data for demonstration purposes
   const fillWithSampleData = () => {
     // Default values based on criteria and item type
@@ -39,18 +45,18 @@ const AlternativesSpecificationInput = ({
     
     if (itemType === 'Phone') {
       defaultValues = [
-        // Memory(GB), Storage(GB), CPU(GHz), Price($), Brand(1-10)
-        ['6', '128', '2.8', '999', '9'],    // iPhone 12
-        ['4', '64', '1.8', '150', '5'],     // ItelA56
-        ['6', '128', '2.0', '200', '6'],    // Tecno Camon 12
-        ['4', '64', '2.0', '180', '6'],     // Infinix Hot 10
-        ['8', '256', '2.6', '700', '8'],    // Huawei P30
-        ['8', '128', '2.8', '600', '8'],    // Google Pixel 7
-        ['6', '128', '2.2', '250', '7'],    // Xiaomi Redmi Note 10
-        ['8', '256', '3.0', '800', '9'],    // Samsung Galaxy S22
-        ['8', '256', '3.2', '1200', '8'],   // Motorola Razr+
-        ['3', '64', '2.5', '600', '9'],     // iPhone XR
-        ['8', '256', '2.7', '700', '9'],    // Samsung Galaxy Note 10
+        // Memory(GB), Storage(GB), CPU(GHz), Price(FCFA), Brand(1-10)
+        ['6', '128', '2.8', '650000', '9'],    // iPhone 12
+        ['4', '64', '1.8', '87000', '5'],     // ItelA56
+        ['6', '128', '2.0', '115000', '6'],    // Tecno Camon 12
+        ['4', '64', '2.0', '100000', '6'],     // Infinix Hot 10
+        ['8', '256', '2.6', '405000', '8'],    // Huawei P30
+        ['8', '128', '2.8', '350000', '8'],    // Google Pixel 7
+        ['6', '128', '2.2', '150000', '7'],    // Xiaomi Redmi Note 10
+        ['8', '256', '3.0', '465000', '9'],    // Samsung Galaxy S22
+        ['8', '256', '3.2', '700000', '8'],   // Motorola Razr+
+        ['3', '64', '2.5', '350000', '9'],     // iPhone XR
+        ['8', '256', '2.7', '405000', '9'],    // Samsung Galaxy Note 10
       ];
     } else if (itemType === 'Laptop') {
       // Example specs for laptops from lecture notes
@@ -108,9 +114,15 @@ const AlternativesSpecificationInput = ({
 
   return (
     <div className="specifications-input">
-      <h2>Step 3: Enter Specifications for {itemType} Alternatives</h2>
-      <p>Enter the specification value for each alternative and criterion:</p>
-
+      <div className="criteria-header">
+        <div className="header-with-icon">
+          <svg className="criteria-icon" viewBox="0 0 24 24" width="28" height="28">
+            <path fill="currentColor" d="M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M19,19H5V5H19V19M17,11V13H7V11H17M13,7V9H7V7H13M7,15H17V17H7V15Z" />
+          </svg>
+          <h2>Enter Specifications for {itemType} Alternatives</h2>
+          <button className="help-button-fixed" onClick={toggleHelpModal} aria-label="Help">?</button>
+        </div>
+      </div>
       {showDefaultsButton && (
         <button 
           className="secondary-button fill-defaults-button" 
@@ -160,17 +172,50 @@ const AlternativesSpecificationInput = ({
       )}
 
       <div className="button-container">
-        <button className="secondary-button" onClick={onPrevious}>
-          Previous: Define Criteria
+        <button className="back-button" onClick={onPrevious}>
+          <svg className="arrow-icon-back" viewBox="0 0 24 24" width="20" height="20">
+            <path fill="currentColor" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
+          </svg>
+          Back to Criteria Comparison
         </button>
         <button 
-          className="primary-button" 
+          className="next-button" 
           onClick={onNext}
           disabled={!allSpecificationsFilled}
         >
           Calculate Results
+          <svg className="arrow-icon" viewBox="0 0 24 24" width="20" height="20">
+            <path fill="currentColor" d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" />
+          </svg>
         </button>
       </div>
+
+      {showHelpModal && (
+        <div className="help-modal-overlay">
+          <div className="help-modal">
+            <button className="close-modal" onClick={toggleHelpModal}>×</button>
+            <h3>Specifications Instructions</h3>
+            <p>
+              In this step, you'll enter specific values for each alternative across all criteria.
+            </p>
+            <p>
+              For example, if you're comparing phones and have criteria like "Battery Life" and "Price," 
+              you would enter the actual battery capacity (e.g., 4000mAh) and price (e.g., 500000FCFA) for each phone.
+            </p>
+            <p>
+              These values will be used to calculate the final rankings of alternatives based on the criteria weights 
+              you defined in the previous step.
+            </p>
+            <p>
+              You can use the "Fill with Sample Data" button to automatically populate the table with realistic 
+              values if you're just exploring the application.
+            </p>
+            <p>
+              All fields must be filled before proceeding to the results calculation.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

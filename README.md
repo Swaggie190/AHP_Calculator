@@ -33,6 +33,7 @@ The application follows the AHP methodology:
    npm run dev
    ```
 6. Open your browser and navigate to `http://localhost:5173` (or the port shown in your terminal)
+7. Alternatively, you can visit directly the site: https://ahpcalculator.netlify.app/
 
 ## Building for Production
 
